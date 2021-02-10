@@ -2,30 +2,8 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 require('dotenv').config();
-
-const mongoose = require('mongoose');
-
 const PORT = process.env.PORT;
-
-// Configuration
-const db = mongoose.connection;
-
-// Connect to Mongo
-mongoose.connect(process.env.mongoURI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-// Connection Error/Success
-db.on('error', (err) => console.log(err.message + ' is Mongod not running?'));
-db.on('connected', () =>
-  console.log('mongo connected: ', process.env.mongoURI),
-);
-db.on('disconnected', () => console.log('mongo disconnected'));
-
-db.on('open', () => {
-  console.log('Connection made!');
-});
+const db = require('./database');
 
 /*------------MIDDLEWARE------------*/
 app.use(cors());
@@ -49,6 +27,10 @@ if (process.env.NODE_ENV === 'dev') {
 require('./routes')(app);
 
 /*------------LISTENER------------*/
+db.connect().then(() => {
+  app.emit('ready');
+});
+
 app.listen(PORT, () => {
   console.log(`App is listening on PORT: ${PORT}`);
 });

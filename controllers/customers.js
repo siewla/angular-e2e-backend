@@ -23,6 +23,50 @@ const customersControllers = {
         res.json(error);
       });
   },
+
+  getCustomerByID: async (req, res) => {
+    Customers.findById(req.params.id)
+      .then((customer) => {
+        res.json(customer);
+      })
+      .catch((error) => {
+        res.json(error);
+      });
+  },
+
+  addNewInsurance: async (req, res) => {
+    Customers.findByIdAndUpdate(
+      req.params.id,
+      {
+        $push: { insurances: req.body },
+      },
+      { safe: true, upsert: true, new: true },
+      function (error, model) {
+        if (error) {
+          res.json(error);
+        } else {
+          res.json('success');
+        }
+      },
+    );
+  },
+
+  removeInsurance: async (req, res) => {
+    Customers.findByIdAndUpdate(
+      req.params.customerID,
+      {
+        $pull: { insurances: { _id: req.params.insuranceID } },
+      },
+      { new: true },
+      function (error, model) {
+        if (error) {
+          res.json(error);
+        } else {
+          res.json('success');
+        }
+      },
+    );
+  },
 };
 
 module.exports = {

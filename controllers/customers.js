@@ -2,6 +2,7 @@ const Customers = require('../models/customers');
 
 const customersControllers = {
   registerNewCustomer: async (req, res) => {
+    console.log(req.body);
     const { name, insurances } = req.body;
     try {
       const dbResult = Customers.create({
@@ -66,6 +67,16 @@ const customersControllers = {
         }
       },
     );
+  },
+
+  removeCustomer: async (req, res) => {
+    Customers.findByIdAndRemove(req.params.customerID, function (error, model) {
+      if (error) {
+        res.json(error);
+      } else {
+        res.json('success');
+      }
+    });
   },
 };
 

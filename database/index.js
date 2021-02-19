@@ -7,6 +7,8 @@ const db = mongoose.connection;
 mongoose.connect(process.env.mongoURI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  autoIndex: true,
+  useCreateIndex: true,
 });
 
 // Connection Error/Success

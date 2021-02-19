@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 const agentSchema = new Schema(
   {
-    email: { type: String, required: true, unique: true },
+    email: {
+      type: String,
+      required: true,
+      unique: [true, 'Username already available'],
+    },
     password: { type: String, required: true },
   },
   { timestamps: false },

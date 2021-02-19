@@ -2,36 +2,34 @@ const Customers = require('../models/customers');
 
 const customersControllers = {
   registerNewCustomer: async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { name, insurances } = req.body;
-    try {
-      const dbResult = Customers.create({
-        name,
-        insurances,
-      });
-      res.json('success');
-    } catch (error) {
-      res.json(error);
-    }
+    Customers.create({ name, insurances }, function (err, user) {
+      if (err) {
+        return res.json('existed');
+      } else {
+        return res.json('success');
+      }
+    });
   },
 
   getAllCustomers: async (req, res) => {
     Customers.find({})
       .then((customers) => {
-        res.json(customers);
+        return res.json(customers);
       })
       .catch((error) => {
-        res.json(error);
+        return res.json(error);
       });
   },
 
   getCustomerByID: async (req, res) => {
     Customers.findById(req.params.id)
       .then((customer) => {
-        res.json(customer);
+        return res.json(customer);
       })
       .catch((error) => {
-        res.json(error);
+        return res.json(error);
       });
   },
 
@@ -44,9 +42,9 @@ const customersControllers = {
       { safe: true, upsert: true, new: true },
       function (error, model) {
         if (error) {
-          res.json(error);
+          return res.json(error);
         } else {
-          res.json('success');
+          return res.json('success');
         }
       },
     );
@@ -61,9 +59,9 @@ const customersControllers = {
       { new: true },
       function (error, model) {
         if (error) {
-          res.json(error);
+          return res.json(error);
         } else {
-          res.json('success');
+          return res.json('success');
         }
       },
     );
@@ -72,9 +70,9 @@ const customersControllers = {
   removeCustomer: async (req, res) => {
     Customers.findByIdAndRemove(req.params.customerID, function (error, model) {
       if (error) {
-        res.json(error);
+        return res.json(error);
       } else {
-        res.json('success');
+        return res.json('success');
       }
     });
   },

@@ -3,7 +3,11 @@ const Schema = mongoose.Schema;
 
 const customerSchema = new Schema(
   {
-    name: { type: String, required: true },
+    name: {
+      type: String,
+      required: true,
+      unique: [true, 'User already available'],
+    },
     insurances: [
       {
         name: { type: String, required: true },

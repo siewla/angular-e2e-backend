@@ -3,17 +3,32 @@ const Agents = require('../models/agents');
 
 const agentsControllers = {
   registerNewAgent: async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { email, password } = req.body;
-    try {
-      const dbResult = Agents.create({
-        email,
-        password,
-      });
-      res.json('success');
-    } catch (error) {
-      res.json(error);
-    }
+    Agents.create({ email, password }, function (err, user) {
+      if (err) {
+        return res.json('existed');
+      } else {
+        return res.json('success');
+      }
+    });
+  },
+
+  authorizeAgent: async (req, res) => {
+    Agents.findOne(
+      { email: req.body.email },
+      'email password',
+      function (err, user) {
+        if (err || !user) {
+          return res.json("User doesn't exist, please sign up.");
+        } else {
+          if (!bcrypt.compareSync(req.body.password, user.password)) {
+            return res.json('Email and password do not match');
+          }
+          return res.json('internal error');
+        }
+      },
+    );
   },
 };
 

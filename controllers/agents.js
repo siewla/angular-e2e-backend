@@ -9,7 +9,7 @@ const agentsControllers = {
       if (err) {
         return res.json('existed');
       } else {
-        return res.json('success');
+        return res.json('created');
       }
     });
   },
@@ -25,7 +25,7 @@ const agentsControllers = {
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             return res.json('Email and password do not match');
           }
-          return res.json('internal error');
+          return res.json('valid');
         }
       },
     );

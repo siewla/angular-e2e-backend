@@ -4,12 +4,26 @@ const Agents = require('../models/agents');
 const agentsControllers = {
   registerNewAgent: async (req, res) => {
     // console.log(req.body);
-    const { email, password } = req.body;
-    Agents.create({ email, password }, function (err, user) {
-      if (err) {
-        return res.json('existed');
+    const { email, password, firstName, lastName } = req.body;
+    Agents.create(
+      { email, password, firstName, lastName },
+      function (err, user) {
+        if (err) {
+          return res.json('existed');
+        } else {
+          return res.json('created');
+        }
+      },
+    );
+  },
+
+  getAgentByAgentID: async (req, res) => {
+    Agents.findById(req.params.agentID, function (err, user) {
+      if (err || !user) {
+        return res.json(err);
       } else {
-        return res.json('created');
+        // console.log(user);
+        return res.json(user);
       }
     });
   },
@@ -25,7 +39,7 @@ const agentsControllers = {
           if (!bcrypt.compareSync(req.body.password, user.password)) {
             return res.json('Email and password do not match');
           }
-          return res.json('valid');
+          return res.json(user);
         }
       },
     );

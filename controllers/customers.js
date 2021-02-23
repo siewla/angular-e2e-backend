@@ -3,8 +3,8 @@ const Customers = require('../models/customers');
 const customersControllers = {
   registerNewCustomer: async (req, res) => {
     // console.log(req.body);
-    const { name, insurances } = req.body;
-    Customers.create({ name, insurances }, function (err, user) {
+    const { name, agentID, insurances } = req.body;
+    Customers.create({ name, agentID, insurances }, function (err, user) {
       if (err) {
         return res.json('existed');
       } else {
@@ -15,6 +15,16 @@ const customersControllers = {
 
   getAllCustomers: async (req, res) => {
     Customers.find({})
+      .then((customers) => {
+        return res.json(customers);
+      })
+      .catch((error) => {
+        return res.json(error);
+      });
+  },
+
+  getCustomersByAgentID: async (req, res) => {
+    Customers.find({ agentID: req.params.agentID })
       .then((customers) => {
         return res.json(customers);
       })
@@ -35,7 +45,7 @@ const customersControllers = {
 
   addNewInsurance: async (req, res) => {
     Customers.findByIdAndUpdate(
-      req.params.id,
+      req.params.customerID,
       {
         $push: { insurances: req.body },
       },

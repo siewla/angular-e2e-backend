@@ -8,10 +8,10 @@ const customerSchema = new Schema(
       required: true,
       unique: [true, 'User already available'],
     },
+    agentID: { type: String, required: true },
     insurances: [
       {
         name: { type: String, required: true },
-        agent: { type: String, required: true },
         dateActivated: { type: Date, required: true },
       },
     ],

@@ -3,18 +3,25 @@ const Agents = require('../models/agents');
 
 const agentsControllers = {
   registerNewAgent: async (req, res) => {
-    // console.log(req.body);
+    console.log(req.body);
     const { email, password, firstName, lastName } = req.body;
-    Agents.create(
-      { email, password, firstName, lastName },
-      function (err, user) {
-        if (err) {
-          return res.json('existed');
-        } else {
-          return res.json('created');
-        }
-      },
-    );
+    Agents.findOne({ email: email }, function (err, user) {
+      if (!user) {
+        Agents.create(
+          { email, password, firstName, lastName },
+          function (err, user) {
+            console.log(err, user);
+            if (err) {
+              return res.json('existed');
+            } else {
+              return res.json('created');
+            }
+          },
+        );
+      } else {
+        return res.json('existed');
+      }
+    });
   },
 
   getAgentByAgentID: async (req, res) => {

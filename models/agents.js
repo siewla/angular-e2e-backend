@@ -6,7 +6,7 @@ const agentSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: [true, 'Username already available'],
+      unique: true,
     },
     password: { type: String, required: true },
     firstName: {

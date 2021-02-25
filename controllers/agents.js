@@ -3,7 +3,7 @@ const Agents = require('../models/agents');
 
 const agentsControllers = {
   registerNewAgent: async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const { email, password, firstName, lastName } = req.body;
     Agents.findOne({ email: email }, function (err, user) {
       if (!user) {
